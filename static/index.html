@@ -175,7 +175,7 @@
 
         async function downloadStream(title, itag, button) {
             const videoUrl = videoUrlInput.value;
-            const downloadUrl = `/download_stream?itag=${itag}`;
+            const startDownloadUrl = `/start_download?itag=${itag}`;
             const preparingDownload = button.nextElementSibling;
 
             button.classList.add('hidden');
@@ -183,7 +183,7 @@
             preparingDownload.classList.add('flex');
 
             try {
-                const response = await fetch(downloadUrl, {
+                const response = await fetch(startDownloadUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -192,24 +192,25 @@
                 });
 
                 if (!response.ok) {
+                    throw new Error('Failed to start download');
+                }
+
+                const { task_id } = await response.json();
+                await pollDownloadStatus(task_id);
+                
+                const downloadUrl = `/download_file/${task_id}`;
+                const downloadResponse = await fetch(downloadUrl);
+                
+                if (!downloadResponse.ok) {
                     throw new Error('Download failed');
                 }
 
-                const contentDisposition = response.headers.get('Content-Disposition');
-                let filename = 'download';
-                if (contentDisposition) {
-                    const filenameMatch = contentDisposition.match(/filename\*?=['"]?(?:UTF-\d['"]*)?(.*?)['"]?(?:;|$)/i);
-                    if (filenameMatch && filenameMatch[1]) {
-                        filename = decodeURIComponent(filenameMatch[1]);
-                    }
-                }
-
-                const blob = await response.blob();
+                const blob = await downloadResponse.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
-                a.download = filename;
+                a.download = `${title}.mp4`;
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
@@ -220,6 +221,21 @@
                 button.classList.remove('hidden');
                 preparingDownload.classList.add('hidden');
                 preparingDownload.classList.remove('flex');
+            }
+        }
+
+        async function pollDownloadStatus(task_id) {
+            while (true) {
+                const response = await fetch(`/download_status/${task_id}`);
+                const data = await response.json();
+                
+                if (data.status === 'completed') {
+                    return;
+                } else if (data.status === 'failed') {
+                    throw new Error(data.error || 'Download failed');
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
     </script>
