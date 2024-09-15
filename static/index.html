@@ -216,7 +216,6 @@
                 window.URL.revokeObjectURL(url);
             } catch (error) {
                 console.error('Download error:', error);
-                alert(`Error: ${error.message}`);
             } finally {
                 button.classList.remove('hidden');
                 preparingDownload.classList.add('hidden');
