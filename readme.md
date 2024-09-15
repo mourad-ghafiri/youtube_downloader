@@ -4,6 +4,11 @@ YouTube Stream Downloader is a web application that allows users to download hig
 
 ![YouTube Stream Downloader Interface](screenshots/home.jpg)
 
+## Deployed Application
+
+You can access the deployed application at:
+[https://youtubedownloader-production-e45f.up.railway.app/](https://youtubedownloader-production-e45f.up.railway.app/)
+
 ## Features
 
 - Simple and intuitive user interface

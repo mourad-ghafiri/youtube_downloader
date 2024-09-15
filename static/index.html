@@ -12,7 +12,7 @@
     <meta property="og:description" content="Free YouTube Stream Downloader. Download high-quality YouTube videos in various formats. Fast, easy, and secure.">
     <meta property="og:url" content="https://youtubedownloader-production-e45f.up.railway.app/">
     <meta property="og:type" content="website">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,19 +32,23 @@
         }
     </script>
     <style type="text/tailwindcss">
-        @layer utilities {
+       @layer utilities {
             .bg-gradient {
                 @apply bg-gradient-to-r from-primary via-accent to-secondary;
             }
             .text-gradient {
                 @apply bg-clip-text text-transparent bg-gradient;
             }
+            .logo-shadow {
+                filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            }
         }
     </style>
 </head>
 <body class="flex flex-col h-full bg-gray-50 font-sans">
     <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-6">
+        <div class="container mx-auto px-4 py-6 flex items-center justify-center">
+            <img src="/static/logo.png" alt="YouTube Stream Downloader Logo" class="w-16 h-16 mr-4 logo-shadow">
             <h1 class="text-4xl font-bold text-center">
                 <span class="text-gradient">YouTube Stream Downloader</span>
             </h1>
@@ -73,6 +77,10 @@
     <footer class="bg-gray-800 text-white py-6 mt-auto">
         <div class="container mx-auto px-4">
             <p class="text-center">&copy; 2024 YouTube Stream Downloader. All rights reserved.</p>
+            <p class="text-center mt-2">
+                This project is open source. View the code on 
+                <a href="https://github.com/mourad-ghafiri/youtube_downloader" target="_blank" rel="noopener noreferrer" class="text-secondary hover:text-accent transition duration-300">GitHub</a>.
+            </p>
         </div>
     </footer>
 
